@@ -1,4 +1,5 @@
 import { Pool, PoolClient } from 'pg';
+import config from 'config';
 
 export class DbInstance {
   private static instance = new DbInstance();
@@ -7,11 +8,11 @@ export class DbInstance {
 
   private constructor() {
     this.pool = new Pool({
-      user: 'db_admin',
-      host: 'localhost',
-      database: 'szkolka_node_js',
-      password: 'password',
-      port: 5431
+      user: config.get('db.user'),
+      host: config.get('db.host'),
+      database: config.get('db.database'),
+      password: config.get('db.password'),
+      port: config.get('db.port')
     });
   }
 

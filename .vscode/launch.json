@@ -15,7 +15,7 @@
             "request": "launch",
             "sourceMaps": true,
             "restart": true,
-            "name": "Launch Program",
+            "name": "Debug locally",
             "skipFiles": [
                 "<node_internals>/**"
             ],

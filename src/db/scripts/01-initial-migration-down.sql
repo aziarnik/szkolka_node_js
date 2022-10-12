@@ -1,4 +1,4 @@
 BEGIN;
-DROP TABLE IF EXISTS public."Migrations";
-DROP TABLE IF EXISTS public."FakeTable";
+DROP TABLE IF EXISTS public.migrations;
+DROP TABLE IF EXISTS public.fake;
 COMMIT;

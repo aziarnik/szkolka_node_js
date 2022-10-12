@@ -1,0 +1,10 @@
+{
+    "port": 5000,
+    "db": {
+        "user": "admin",
+        "host": "localhost",
+        "database": "szkolka_node_js",
+        "password": "admin",
+        "port": 5432
+    }
+}

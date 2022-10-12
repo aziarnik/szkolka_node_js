@@ -7,4 +7,4 @@ COPY . .
 EXPOSE 4000
 RUN chown -R node /usr/src
 USER node
-CMD ["npm", "start"]
+CMD ["npm", "run", "start-docker"]

@@ -8,33 +8,33 @@ IF NOT EXISTS (
         pg_tables
     WHERE 
         schemaname = 'public' AND 
-        tablename  = 'Migrations'
+        tablename  = 'migrations'
     )
 	THEN 
-	CREATE TABLE IF NOT EXISTS public."Migrations"
+	CREATE TABLE IF NOT EXISTS public.migrations
     (
-        "ExecutedAt" date NOT NULL,
-        "Id" serial NOT NULL,
-        "Name" character varying(100) NOT NULL,
-        PRIMARY KEY ("Id"),
-        CONSTRAINT "Migration_Name_Unique" UNIQUE ("Name")
+        executedAt date NOT NULL,
+        id serial NOT NULL,
+        migrationName character varying(100) NOT NULL,
+        PRIMARY KEY (id),
+        CONSTRAINT "Migration_Name_Unique" UNIQUE (migrationName)
     )
 	
 	TABLESPACE pg_default;
 	
-	ALTER TABLE IF EXISTS public."Migrations"
+	ALTER TABLE IF EXISTS public.migrations
         OWNER to db_admin;
 		
-	CREATE TABLE public."FakeTable"
+	CREATE TABLE public.fake
     (
-        "Id" serial NOT NULL,
-        "Fake" character varying(100) NOT NULL,
-        PRIMARY KEY ("Id")
+        id serial NOT NULL,
+        fake character varying(100) NOT NULL,
+        PRIMARY KEY (id)
     );
-	ALTER TABLE IF EXISTS public."FakeTable"
+	ALTER TABLE IF EXISTS public.fakeTable
     OWNER to db_admin;
 	
-	INSERT INTO public."Migrations" ("ExecutedAt", "Name") VALUES (CURRENT_TIMESTAMP, '01-initial-migration');
+	INSERT INTO public.migrations (executedAt, migrationName) VALUES (CURRENT_TIMESTAMP, '01-initial-migration');
 	END IF;
 END
 $do$;

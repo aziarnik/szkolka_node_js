@@ -10,7 +10,7 @@ services:
     ports:
       - '5431:5432'
     volumes:
-      - /var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
   szkolkanodejs:
     image: szkolkanodejs
     build:
@@ -19,4 +19,7 @@ services:
     ports:
       - 4000:4000
       - 9229:9229
-    command: ["npm", "run", "attach-to-docker"]
+    command: ["npm", "run", "start-docker-dev"]
+
+volumes:
+  postgres-data: {}

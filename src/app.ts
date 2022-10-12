@@ -5,20 +5,22 @@ import { DbInstance } from './db/db-client';
 import { migrate } from './db/migrations/migrate';
 import { DbConnection } from './db/db-connection';
 import { seed } from './db/migrations/seed';
+import config from 'config';
+import { fakeRoute } from './routers/fake-crud-route';
 
 const app = express();
+const port = config.get('port');
 
-app.use(bodyParser.json());
 app.use(async (req, res, next) => {
   req.dbConnection = new DbConnection(await DbInstance.getConnection());
   next();
 });
-app.get('/', (req, res) => {
-  res.send({ message: 'Hello world' });
-});
+app.use(bodyParser.json());
 app.use(versionRoute);
+app.use(fakeRoute);
 
-app.listen(4000, 'localhost', async () => {
+app.listen(port, async () => {
+  console.log(`Program is running on port: ${port}`);
   DbInstance.getInstance();
   await migrate();
   await seed();

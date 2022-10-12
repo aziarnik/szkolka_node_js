@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules", "src/__tests__/**"],
+  "exclude": ["node_modules", "src/__tests__"],
   "compilerOptions": {
     "experimentalDecorators": true,
     /* Visit https://aka.ms/tsconfig to read more about this file */
