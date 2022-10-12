@@ -15,6 +15,7 @@ app.use(async (req, res, next) => {
   req.dbConnection = new DbConnection(await DbInstance.getConnection());
   next();
 });
+
 app.use(bodyParser.json());
 app.use(versionRoute);
 app.use(fakeRoute);
