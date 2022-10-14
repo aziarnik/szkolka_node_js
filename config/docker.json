@@ -2,9 +2,9 @@
     "port": 4000,
     "db": {
         "user": "db_admin",
-        "host": "localhost",
+        "host": "db",
         "database": "szkolka_node_js",
         "password": "password",
-        "port": 5431
+        "port": 5432
     }
 }

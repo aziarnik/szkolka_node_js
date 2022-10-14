@@ -6,15 +6,15 @@
   "scripts": {
     "build": "tsc && rm -rf ./dist/db/scripts && cp -r src/db/scripts ./dist/db/scripts",
     "test": "jest",
-    "start-dev": "tsc && rm -rf ./dist/db/scripts && cp -r src/db/scripts ./dist/db/scripts && nodemon dist/app.js",
-    "start": "export NODE_ENV=production && tsc && rm -rf ./dist/db/scripts && cp -r src/db/scripts ./dist/db/scripts && node dist/app.js",
-    "start-docker-dev": "export NODE_ENV=local-docker && tsc && rm -rf ./dist/db/scripts && cp -r src/db/scripts ./dist/db/scripts && node --inspect=0.0.0.0:9229 dist/app.js",
-    "start-docker": "export NODE_ENV=docker && tsc && rm -rf ./dist/db/scripts && cp -r src/db/scripts ./dist/db/scripts && node dist/app.js",
+    "start-dev": "export NODE_ENV=default && npm run build && nodemon dist/app.js",
+    "start": "export NODE_ENV=production && npm run build && node dist/app.js",
+    "start-docker-dev": "export NODE_ENV=local-docker && npm run build && nodemon --inspect=0.0.0.0:9229 dist/app.js",
+    "start-docker-prod": "export NODE_ENV=docker && node dist/app.js",
+    "build-docker-prod": "export NODE_ENV=docker && npm run build",
     "lint": "eslint . --ext .ts",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "docker-build": "docker build --pull --rm -f 'Dockerfile' -t szkolkanodejs:latest '.'",
-    "docker-compose": "docker compose -f 'docker-compose.yml' up -d --build",
-    "docker-compose-dev": "docker compose -f 'docker-compose.debug.yml' up -d --build"
+    "docker-compose-up": "docker builder prune && docker compose --env-file .env.prod -f 'docker-compose.yml' up -d --build",
+    "docker-compose-dev-up": "docker compose --env-file .env.dev -f 'docker-compose.debug.yml' up -d --build"
   },
   "repository": {
     "type": "git",

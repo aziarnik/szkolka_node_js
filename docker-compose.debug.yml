@@ -4,22 +4,21 @@ services:
   postgres:
     image: postgres
     environment:
-      - POSTGRES_USER=db_admin
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=szkolka_node_js
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DBHOST=postgres
     ports:
-      - '5431:5432'
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - '${POSTGRES_PORT}:5432'
   szkolkanodejs:
     image: szkolkanodejs
     build:
       context: .
       dockerfile: ./Dockerfile
+      target: builder
     ports:
       - 4000:4000
       - 9229:9229
+    environment:
+      - NODE_ENV=${NODE_ENV}
     command: ["npm", "run", "start-docker-dev"]
-
-volumes:
-  postgres-data: {}

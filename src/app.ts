@@ -21,8 +21,12 @@ app.use(versionRoute);
 app.use(fakeRoute);
 
 app.listen(port, async () => {
-  console.log(`Program is running on port: ${port}`);
-  DbInstance.getInstance();
-  await migrate();
-  await seed();
+  try {
+    console.log(`Program is running on port: ${port}`);
+    DbInstance.getInstance();
+    await migrate();
+    await seed();
+  } catch (exc) {
+    console.log(exc);
+  }
 });
