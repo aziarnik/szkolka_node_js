@@ -2,6 +2,7 @@ import { PoolClient } from 'pg';
 
 export class DbConnection {
   readonly connection: PoolClient;
+  private released = false;
   constructor(connection: PoolClient) {
     this.connection = connection;
   }
@@ -43,7 +44,16 @@ export class DbConnection {
       `SELECT ${columns.join(',')} FROM public.${tableName} WHERE id=$1;`,
       [id.toString()]
     );
-
+    if (!result[0]) {
+      throw Error('ni mo takiego');
+    }
     return result[0];
+  }
+
+  release() {
+    if (!this.released) {
+      this.connection.release();
+      this.released = true;
+    }
   }
 }

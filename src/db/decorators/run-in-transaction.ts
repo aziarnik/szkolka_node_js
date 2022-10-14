@@ -23,7 +23,7 @@ export function runInTransaction() {
         dbConnection.rollbackTransation();
         throw error;
       } finally {
-        dbConnection.connection.release();
+        dbConnection.release();
       }
     };
 

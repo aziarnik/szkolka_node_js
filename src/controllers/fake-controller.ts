@@ -11,8 +11,10 @@ export class FakeController {
     this.fakeRepository = new FakeRepository(connection);
   }
   @runInTransaction()
-  async GetFakeObject(req: Request<IdInfo>, res: Response<Fake>) {
-    const result = await this.fakeRepository.firstOrDefaultById(req.params.id);
+  async GetFakeObject(req: Request, res: Response<Fake>) {
+    const result = await this.fakeRepository.firstOrDefaultById(
+      parseInt(req.params['id'])
+    );
     res.send(result);
   }
 
