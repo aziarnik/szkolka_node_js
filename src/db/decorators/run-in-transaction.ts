@@ -22,8 +22,6 @@ export function runInTransaction() {
       } catch (error) {
         dbConnection.rollbackTransation();
         throw error;
-      } finally {
-        dbConnection.release();
       }
     };
 
