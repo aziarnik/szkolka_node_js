@@ -1,10 +1,9 @@
 import { RequestHandler } from 'express';
 import onFinished from 'on-finished';
-import { DbInstance } from '../db/db-client';
-import { DbConnection } from '../db/db-connection';
+import { DbConnectionFactory } from '../db/db-client';
 
 export const assignDbConnection: RequestHandler = async (req, res, next) => {
-  req.dbConnection = new DbConnection(await DbInstance.getConnection());
+  req.dbConnection = await DbConnectionFactory.getPostgresConnection();
   onFinished(req, function (err, req) {
     req.dbConnection?.release();
   });

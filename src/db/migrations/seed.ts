@@ -1,9 +1,8 @@
-import { DbInstance } from '../db-client';
+import { DbConnection } from '../db-connection';
 import { readSqlFileText } from '../helpers/read-sql-script-helper';
 
-export const seed = async function () {
-  const connection = await DbInstance.getConnection();
-  connection.query(await seedQuery());
+export const seed = async function (connection: DbConnection) {
+  connection.queryWithoutParams(await seedQuery());
 };
 
 const seedQuery = async function (): Promise<string> {

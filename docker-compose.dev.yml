@@ -11,14 +11,18 @@ services:
     ports:
       - '${POSTGRES_PORT}:5432'
   szkolkanodejs:
+    depends_on:
+      - postgres
     image: szkolkanodejs
     build:
       context: .
       dockerfile: ./Dockerfile
       target: builder
     ports:
-      - 4000:4000
+      - ${PORT}:${PORT}
       - 9229:9229
     environment:
       - NODE_ENV=${NODE_ENV}
+      - POSTGRES_CONNECTION_STRING=${POSTGRES_CONNECTION_STRING}
+      - PORT=${PORT}
     command: ["npm", "run", "start-docker-dev"]

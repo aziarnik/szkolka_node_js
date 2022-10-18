@@ -1,9 +1,10 @@
-import { PoolClient } from 'pg';
+import { errorMessages } from '../error-messages';
+import { IConnection } from './interfaces/i-connection';
 
 export class DbConnection {
-  readonly connection: PoolClient;
+  readonly connection: IConnection;
   private released = false;
-  constructor(connection: PoolClient) {
+  constructor(connection: IConnection) {
     this.connection = connection;
   }
 
@@ -44,10 +45,21 @@ export class DbConnection {
       `SELECT ${columns.join(',')} FROM public.${tableName} WHERE id=$1;`,
       [id.toString()]
     );
-    if (!result[0]) {
-      throw Error('ni mo takiego');
-    }
     return result[0];
+  }
+
+  async firstById(
+    id: number,
+    tableName: string,
+    columns: string[]
+  ): Promise<unknown> {
+    const result = await this.firstOrDefaultById(id, tableName, columns);
+    if (!result) {
+      throw Error(
+        `${errorMessages.DB_ENTRY_NOT_EXIST} - table name: ${tableName}, id: ${id}`
+      );
+    }
+    return result;
   }
 
   release() {

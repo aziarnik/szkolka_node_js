@@ -7,9 +7,11 @@ import { FakeRepository } from '../db/repositories/fake-repository';
 
 export class FakeController {
   private readonly fakeRepository: FakeRepository;
+
   constructor(connection: DbConnection) {
     this.fakeRepository = new FakeRepository(connection);
   }
+
   @runInTransaction()
   async GetFakeObject(req: Request, res: Response<Fake>) {
     const result = await this.fakeRepository.firstOrDefaultById(

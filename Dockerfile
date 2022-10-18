@@ -1,21 +1,19 @@
-FROM node:lts-alpine as builder
+FROM node:lts-alpine as base 
 WORKDIR /usr/src
 COPY "package.json" "./"
 COPY "package-lock.json" "./"
-RUN npm install
 RUN apk update && apk add --no-cache git
+
+FROM base as builder
+RUN npm install
 COPY . .
-RUN chown -R node /usr/src
-USER node
 CMD ["npm", "run", "build-docker-prod"]
 
-FROM node:lts-alpine
-WORKDIR /usr/src
-COPY "package.json" "./"
-COPY "package-lock.json" "./"
+FROM base
 RUN npm install --omit=dev
-RUN apk update && apk add --no-cache git
 COPY ./config /usr/src/config
 COPY --from=builder /usr/src/dist /usr/src/dist
+RUN chown -R node /usr/src
+USER node
 CMD ["npm", "run", "start-docker-prod"]
 

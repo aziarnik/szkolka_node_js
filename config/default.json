@@ -1,10 +1,6 @@
 {
     "port": 4000,
-    "db": {
-        "user": "admin",
-        "host": "localhost",
-        "database": "szkolka_node_js",
-        "password": "admin",
-        "port": 5432
+    "connectionStrings": {
+        "postgreSql": "postgres://admin:admin@localhost:5432/szkolka_node_js"
     }
 }
