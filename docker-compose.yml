@@ -10,6 +10,8 @@ services:
       - DBHOST=db
     ports:
       - '${POSTGRES_PORT}:5432'
+    volumes:
+      - prod-postgres-volume:/var/lib/postgresql/data
   szkolkanodejs:
     depends_on:
       - db
@@ -23,3 +25,5 @@ services:
       - NODE_ENV=${NODE_ENV}
       - POSTGRES_CONNECTION_STRING=${POSTGRES_CONNECTION_STRING}
       - PORT=${PORT}
+volumes:
+  prod-postgres-volume:

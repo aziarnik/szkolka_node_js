@@ -10,6 +10,8 @@ services:
       - DBHOST=postgres
     ports:
       - '${POSTGRES_PORT}:5432'
+    volumes:
+      - dev-postgres-volume:/var/lib/postgresql/data
   szkolkanodejs:
     depends_on:
       - postgres
@@ -26,3 +28,5 @@ services:
       - POSTGRES_CONNECTION_STRING=${POSTGRES_CONNECTION_STRING}
       - PORT=${PORT}
     command: sh -c './wait-for.sh postgres:5432 -- npm run start-docker-dev'
+volumes:
+  dev-postgres-volume:
