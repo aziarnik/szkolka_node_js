@@ -25,4 +25,4 @@ services:
       - NODE_ENV=${NODE_ENV}
       - POSTGRES_CONNECTION_STRING=${POSTGRES_CONNECTION_STRING}
       - PORT=${PORT}
-    command: ["npm", "run", "start-docker-dev"]
+    command: sh -c './wait-for.sh postgres:5432 -- npm run start-docker-dev'

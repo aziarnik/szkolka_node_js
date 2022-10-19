@@ -18,6 +18,14 @@ export class FakeRepository {
     )) as Promise<Fake>;
   }
 
+  async firstById(id: number): Promise<Fake> {
+    return (await this.dbConnection.firstById(
+      id,
+      this.tableName,
+      this.columns
+    )) as Promise<Fake>;
+  }
+
   async getAll(): Promise<Fake[]> {
     return await this.dbConnection.queryWithoutParams(
       'SELECT id, fake FROM public.fake;'

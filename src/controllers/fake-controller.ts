@@ -14,7 +14,7 @@ export class FakeController {
 
   @runInTransaction()
   async GetFakeObject(req: Request, res: Response<Fake>) {
-    const result = await this.fakeRepository.firstOrDefaultById(
+    const result = await this.fakeRepository.firstById(
       parseInt(req.params['id'])
     );
     res.send(result);
