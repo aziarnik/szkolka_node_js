@@ -1,5 +1,5 @@
 declare namespace Express {
   export interface Request {
-    dbConnection?: import('../db/db-connection').DbConnection;
+    dbConnection?: import('../db/interfaces/i-db-connection').IDbConnection;
   }
 }

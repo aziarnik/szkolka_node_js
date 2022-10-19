@@ -2,13 +2,13 @@ import { runInTransaction } from '../db/decorators/run-in-transaction';
 import { Fake } from '../db/entities/fake';
 import { Request, Response } from 'express';
 import { IdInfo } from '../contracts/id-info';
-import { DbConnection } from '../db/db-connection';
 import { FakeRepository } from '../db/repositories/fake-repository';
+import { IDbConnection } from '../db/interfaces/i-db-connection';
 
 export class FakeController {
   private readonly fakeRepository: FakeRepository;
 
-  constructor(connection: DbConnection) {
+  constructor(connection: IDbConnection) {
     this.fakeRepository = new FakeRepository(connection);
   }
 

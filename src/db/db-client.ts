@@ -1,10 +1,21 @@
 import { Pool, PoolClient } from 'pg';
 import config from 'config';
-import { DbConnection } from './db-connection';
+import { PostgresDbConnection } from './postgres-db-connection';
+import { IDbConnection } from './interfaces/i-db-connection';
 
 export class DbConnectionFactory {
-  static async getPostgresConnection(): Promise<DbConnection> {
-    return new DbConnection(await PostgresDbInstance.getConnection());
+  static async getPostgresConnection(): Promise<IDbConnection> {
+    return new PostgresDbConnection(await PostgresDbInstance.getConnection());
+  }
+}
+
+export class DbConnectionWrapper {
+  static async runInPostgres(
+    fn: (conn: IDbConnection) => Promise<void>
+  ): Promise<void> {
+    const connection = await DbConnectionFactory.getPostgresConnection();
+    await fn(connection);
+    connection.release();
   }
 }
 

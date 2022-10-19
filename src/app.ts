@@ -8,7 +8,8 @@ import { fakeRoute } from './routers/fake-crud-route';
 import { errorHandler } from './middlewares/error-request-handler';
 import { assignDbConnection } from './middlewares/assign-db-connection';
 import { logger } from './bunyan';
-import { DbConnectionFactory } from './db/db-client';
+import { IDbConnection } from './db/interfaces/i-db-connection';
+import { DbConnectionWrapper } from './db/db-client';
 
 const app = express();
 const port = config.get('port');
@@ -24,11 +25,10 @@ app.use(errorHandler);
 app.listen(port, async () => {
   try {
     logger.info(`Program is running on port: ${port}`);
-    const postgreSqlConnection =
-      await DbConnectionFactory.getPostgresConnection();
-    await migrate(postgreSqlConnection);
-    await seed(postgreSqlConnection);
-    postgreSqlConnection.release();
+    DbConnectionWrapper.runInPostgres(async (conn: IDbConnection) => {
+      await migrate(conn);
+      await seed(conn);
+    });
   } catch (exc) {
     logger.error(exc);
   }

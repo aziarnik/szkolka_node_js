@@ -1,12 +1,12 @@
-import { DbConnection } from '../db-connection';
 import { Fake } from '../entities/fake';
+import { IDbConnection } from '../interfaces/i-db-connection';
 
 export class FakeRepository {
-  private readonly dbConnection: DbConnection;
+  private readonly dbConnection: IDbConnection;
   private tableName = 'fake';
   private columns: string[] = ['id', 'fake'];
 
-  constructor(conn: DbConnection) {
+  constructor(conn: IDbConnection) {
     this.dbConnection = conn;
   }
 

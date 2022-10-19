@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { DbConnection } from '../db-connection';
+import { IDbConnection } from '../interfaces/i-db-connection';
 
 export function runInTransaction() {
   return function (
@@ -14,7 +14,7 @@ export function runInTransaction() {
       res: Response,
       next: NextFunction
     ) {
-      const dbConnection: DbConnection = req.dbConnection as DbConnection;
+      const dbConnection: IDbConnection = req.dbConnection as IDbConnection;
       try {
         dbConnection.beginTransation();
         await originalMethod?.call(this, req, res, next);

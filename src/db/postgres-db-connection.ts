@@ -1,9 +1,11 @@
 import { errorMessages } from '../error-messages';
 import { IConnection } from './interfaces/i-connection';
+import { IDbConnection } from './interfaces/i-db-connection';
 
-export class DbConnection {
+export class PostgresDbConnection implements IDbConnection {
   readonly connection: IConnection;
   private released = false;
+
   constructor(connection: IConnection) {
     this.connection = connection;
   }

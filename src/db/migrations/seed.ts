@@ -1,7 +1,7 @@
-import { DbConnection } from '../db-connection';
 import { readSqlFileText } from '../helpers/read-sql-script-helper';
+import { IDbConnection } from '../interfaces/i-db-connection';
 
-export const seed = async function (connection: DbConnection) {
+export const seed = async function (connection: IDbConnection) {
   connection.queryWithoutParams(await seedQuery());
 };
 
