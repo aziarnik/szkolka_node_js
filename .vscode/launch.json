@@ -8,7 +8,7 @@
             "type": "node",
             "request": "attach",
             "name": "Docker: Attach to Node",
-            "remoteRoot": "/usr/src/app"
+            "remoteRoot": "/usr/src"
         },
         {
             "type": "node",

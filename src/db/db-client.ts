@@ -1,7 +1,7 @@
 import { Pool, PoolClient } from 'pg';
-import config from 'config';
 import { PostgresDbConnection } from './postgres-db-connection';
 import { IDbConnection } from './interfaces/i-db-connection';
+import { Configuration } from '../configuration/configuration';
 
 export class DbConnectionFactory {
   static async getPostgresConnection(): Promise<IDbConnection> {
@@ -21,12 +21,13 @@ export class DbConnectionWrapper {
 
 class PostgresDbInstance {
   private static instance = new PostgresDbInstance(
-    config.get('connectionStrings.postgreSql')
+    Configuration.POSTGRES_CONNECTION_STRING
   );
 
   private pool: Pool;
 
   private constructor(connectionString: string) {
+    console.log(connectionString);
     this.pool = new Pool({ connectionString: connectionString });
   }
 

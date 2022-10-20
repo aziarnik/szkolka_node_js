@@ -3,16 +3,16 @@ import express from 'express';
 import { versionRoute } from './routers/version-route';
 import { migrate } from './db/migrations/migrate';
 import { seed } from './db/migrations/seed';
-import config from 'config';
 import { fakeRoute } from './routers/fake-crud-route';
 import { errorHandler } from './middlewares/error-request-handler';
 import { assignDbConnection } from './middlewares/assign-db-connection';
 import { logger } from './bunyan';
 import { IDbConnection } from './db/interfaces/i-db-connection';
 import { DbConnectionWrapper } from './db/db-client';
+import { Configuration } from './configuration/configuration';
 
 const app = express();
-const port = config.get('port');
+const port = Configuration.PORT;
 
 app.use(assignDbConnection);
 

@@ -4,18 +4,22 @@ COPY "package.json" "./"
 COPY "package-lock.json" "./"
 RUN apk update && apk add --no-cache git
 
-FROM base as builder
+FROM base as builder-1
 RUN npm install
 COPY . .
 COPY "wait-for.sh" "./"
 RUN ["chmod", "+x", "./wait-for.sh"]
-CMD ["npm", "run", "build-docker-prod"]
+
+FROM builder-1 as builder-2
+RUN ["npm", "run", "build-docker-prod"]
 
 FROM base
 RUN npm install --omit=dev
-COPY ./config /usr/src/config
-COPY --from=builder /usr/src/dist /usr/src/dist
-COPY --from=builder "./usr/src/wait-for.sh" "./"
+RUN mkdir -p ./config
+RUN mkdir -p ./dist
+COPY ./config ./config
+COPY --from=builder-2 /usr/src/dist/. ./dist
+COPY --from=builder-2 /usr/src/wait-for.sh /usr/src
 RUN chown -R node /usr/src
 USER node
 CMD sh -c './wait-for.sh db:5432 -- npm run start-docker-prod'
