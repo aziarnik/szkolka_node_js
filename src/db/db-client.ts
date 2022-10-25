@@ -2,6 +2,7 @@ import { Pool, PoolClient } from 'pg';
 import { PostgresDbConnection } from './postgres-db-connection';
 import { IDbConnection } from './interfaces/i-db-connection';
 import { Configuration } from '../configuration/configuration';
+import { logger } from '../bunyan';
 
 export class DbConnectionFactory {
   static async getPostgresConnection(): Promise<IDbConnection> {
@@ -16,6 +17,22 @@ export class DbConnectionWrapper {
     const connection = await DbConnectionFactory.getPostgresConnection();
     await fn(connection);
     connection.release();
+  }
+
+  static async runTransactionInPostgres(
+    fn: (conn: IDbConnection) => Promise<void>
+  ) {
+    const connection = await DbConnectionFactory.getPostgresConnection();
+    try {
+      connection.beginTransation();
+      await fn(connection);
+      connection.commitTransaction();
+    } catch (err) {
+      connection.rollbackTransation();
+      logger.error(err);
+    } finally {
+      connection.release();
+    }
   }
 }
 

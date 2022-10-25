@@ -2,5 +2,7 @@
     "port": "PORT",
     "connectionStrings": {
         "postgreSql": "POSTGRES_CONNECTION_STRING"
-    }
+    },
+    "passwordPepper": "PASSWORD_PEPPER",
+    "jwTokenSecret": "JWTOKEN_SECRET"
 }
