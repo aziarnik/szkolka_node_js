@@ -25,7 +25,7 @@ export class AccessToken extends ValueObject<AccessTokenProps> {
           refreshToken: userContext.refreshToken.value,
           role: userContext.role
         },
-        Consts.REFRESH_TOKEN_EXPIRATION_IN_SECONDS
+        Consts.ACCESS_TOKEN_EXPIRATION_IN_SECONDS
       )
     });
   }

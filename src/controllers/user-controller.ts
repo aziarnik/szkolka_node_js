@@ -11,6 +11,7 @@ import { Role } from '../enums/user-role';
 import { RequestHandlerHelper } from '../helpers/request-handler-helper';
 import { EventRepository } from '../db/repositories/event-repository';
 import { UserDeletedEventBody } from '../db/entities/events/events-body/user-deleted-event-body';
+import { GetUserDto } from '../contracts/user/get-user-dto';
 
 export class UserController {
   private readonly userRepository: UserRepository;
@@ -22,9 +23,9 @@ export class UserController {
   }
 
   @runInTransaction()
-  async getAllUsers(req: Request, res: Response<User[]>) {
+  async getAllUsers(req: Request, res: Response<GetUserDto[]>) {
     const result = await this.userRepository.getAll();
-    res.send(result);
+    res.send(result.map((user) => new GetUserDto(user)));
   }
 
   @runInTransaction()
