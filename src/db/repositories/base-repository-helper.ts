@@ -1,4 +1,5 @@
 import { errorMessages } from '../../error-messages';
+import { ValueObject } from '../../value-objects/value-object-base';
 
 export class BaseRepositoryHelper {
   static getRawColumnName(columnName: string): string {
@@ -14,6 +15,9 @@ export class BaseRepositoryHelper {
     }
     if (typeof value === 'string') {
       return value;
+    }
+    if (value instanceof ValueObject) {
+      return value.toString();
     }
     throw new Error(errorMessages.NO_MAPPING_PROVIDED);
   }

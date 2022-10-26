@@ -7,7 +7,7 @@ export class UserContext {
   refreshToken: RefreshToken;
   role: Role;
 
-  constructor(userContext: any) {
+  constructor(userContext: IUserContextEntry) {
     this.id = userContext.id;
     this.email = userContext.email;
     this.refreshToken = RefreshToken.create(userContext.refreshToken);
@@ -17,4 +17,11 @@ export class UserContext {
   isAdmin = () => this.role === Role.Admin;
 
   isUser = () => this.role === Role.Admin || this.role === Role.User;
+}
+
+export interface IUserContextEntry {
+  id: number;
+  email: string;
+  refreshToken: string;
+  role: Role;
 }

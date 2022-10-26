@@ -5,7 +5,7 @@ import { RepositoriesStorage } from '../db/repositories/repositories-storage';
 
 export class EventScheduler {
   static scheduleEventProcess = () => {
-    const job = schedule.scheduleJob('* * * * *', async function () {
+    const eventJob = schedule.scheduleJob('* * * * *', async function () {
       DbConnectionWrapper.runTransactionInPostgres(
         async (dbConnection: IDbConnection) => {
           const reposStorage = new RepositoriesStorage(dbConnection);

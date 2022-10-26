@@ -33,4 +33,8 @@ export class AccessToken extends ValueObject<AccessTokenProps> {
   public static create(value: string): AccessToken {
     return new AccessToken({ value: value });
   }
+
+  toString(): string {
+    return this.value;
+  }
 }

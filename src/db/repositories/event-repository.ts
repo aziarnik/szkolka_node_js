@@ -1,4 +1,8 @@
-import { AppEvent } from '../entities/events/event';
+import {
+  AppEvent,
+  IAppEventEntryData,
+  IBasicAppEventData
+} from '../entities/events/event';
 import { IDbConnection } from '../interfaces/i-db-connection';
 
 export class EventRepository {
@@ -8,9 +12,11 @@ export class EventRepository {
   }
 
   async getEventsToProcess(): Promise<AppEvent[]> {
-    return this.dbConnection.queryWithoutParams(
-      `SELECT Id, event_body, event_type FROM public.events WHERE completed_at=NULL`
-    );
+    return (
+      await this.dbConnection.queryWithoutParams(
+        `SELECT id, event_body, event_type FROM public.events WHERE completed_at is NULL`
+      )
+    ).map((x) => new AppEvent(x as IAppEventEntryData));
   }
 
   async completeEvent(eventId: number) {
@@ -20,9 +26,9 @@ export class EventRepository {
     );
   }
 
-  async addNewEvent(event: AppEvent) {
+  async addNewEvent(event: IBasicAppEventData) {
     this.dbConnection.command(
-      `INSERT INTO public.events(event_type, event_body, deleted_on) VALUES ($1, $2, NULL)`,
+      `INSERT INTO public.events(event_type, event_body) VALUES ($1, $2)`,
       [event.event_type, JSON.stringify(event.event_body)]
     );
   }

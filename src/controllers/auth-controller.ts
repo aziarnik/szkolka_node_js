@@ -7,16 +7,19 @@ import { runInTransaction } from '../db/decorators/run-in-transaction';
 import { Consts } from '../consts';
 import { RefreshTokenRepository } from '../db/repositories/refresh-token-repository';
 import { UserTokenService } from '../services/user-token-service';
-import { RefreshToken } from '../value-objects/refresh-token';
+import { EventRepository } from '../db/repositories/event-repository';
+import { SomeoneUsedOldRefreshTokenEventBody } from '../db/entities/events/events-body/someone-used-old-refresh-token-event-body';
 
 export class AuthController {
   private readonly userRepository: UserRepository;
   private readonly refreshTokenRepository: RefreshTokenRepository;
   private readonly userTokenService: UserTokenService;
+  private readonly eventRepository: EventRepository;
 
   constructor(connection: IDbConnection) {
     this.userRepository = new UserRepository(connection);
     this.refreshTokenRepository = new RefreshTokenRepository(connection);
+    this.eventRepository = new EventRepository(connection);
     this.userTokenService = new UserTokenService(
       this.userRepository,
       this.refreshTokenRepository
@@ -49,7 +52,9 @@ export class AuthController {
         req.userContext.id,
         req.userContext.refreshToken.value
       );
-    await this.refreshTokenRepository.archive(activeRefreshToken.id);
+    if (activeRefreshToken) {
+      await this.refreshTokenRepository.archive(activeRefreshToken.id);
+    }
     res.removeHeader(Consts.AUTHORIZATION_HEADER);
 
     res.status(200).json('Logged out');
@@ -64,7 +69,13 @@ export class AuthController {
     if (
       userRefreshTokens.wasRefreshTokenUsedBefore(req.userContext.refreshToken)
     ) {
-      res.status(420).json('Something went wrong');
+      await this.eventRepository.addNewEvent({
+        event_type: 'SomeoneUsedOldRefreshToken',
+        event_body: new SomeoneUsedOldRefreshTokenEventBody({
+          userId: req.userContext.id
+        })
+      });
+      return res.status(205).json('Something went wrong');
     }
 
     const activeTokenFromDb = userRefreshTokens.getActiveRefreshTokenByValue(
@@ -74,7 +85,9 @@ export class AuthController {
       res.status(421).json('Refresh token not exist');
     }
 
-    RefreshToken.create(activeTokenFromDb.value).validate();
+    if (activeTokenFromDb.value.validate()) {
+      res.status(422).json('Refresh token expired');
+    }
 
     await this.refreshTokenRepository.archive(activeTokenFromDb.id);
 

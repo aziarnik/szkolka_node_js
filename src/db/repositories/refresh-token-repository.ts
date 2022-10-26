@@ -1,15 +1,26 @@
 import { UserRefreshTokens } from '../../aggregates/user-refresh-tokens';
-import { ActiveRefreshToken } from '../entities/active-refresh-token';
-import { UsedRefreshToken } from '../entities/used-refresh-token';
+import {
+  ActiveRefreshToken,
+  IActiveRefreshTokenEntryData
+} from '../entities/active-refresh-token';
+import {
+  IUsedRefreshTokenEntryData,
+  UsedRefreshToken
+} from '../entities/used-refresh-token';
 import { IDbConnection } from '../interfaces/i-db-connection';
 import { BaseRepository } from './base-repository';
 
-export class RefreshTokenRepository extends BaseRepository<ActiveRefreshToken> {
+export class RefreshTokenRepository extends BaseRepository<
+  ActiveRefreshToken,
+  IActiveRefreshTokenEntryData
+> {
   protected tableSchema = 'auth';
   protected tableName = 'activerefreshtokens';
   protected historicTableName = 'inactiverefreshtokens';
   protected columns: string[] = ['id', 'user_id', 'value'];
-  protected entityType: new (entity: ActiveRefreshToken) => ActiveRefreshToken;
+  protected entityType: new (
+    entity: IActiveRefreshTokenEntryData
+  ) => ActiveRefreshToken;
 
   constructor(conn: IDbConnection) {
     super(conn);
@@ -19,13 +30,15 @@ export class RefreshTokenRepository extends BaseRepository<ActiveRefreshToken> {
   async findForUserByValue(
     userId: number,
     value: string
-  ): Promise<ActiveRefreshToken> {
+  ): Promise<ActiveRefreshToken | null> {
     const results = await this.dbConnection.query(
       `SELECT ${this.columns} FROM ${this.tableSchema}.${this.tableName} WHERE user_id=$1 AND value=$2`,
       [userId.toString(), value]
     );
 
-    return new ActiveRefreshToken(results[0] as ActiveRefreshToken);
+    return results[0]
+      ? new ActiveRefreshToken(results[0] as IActiveRefreshTokenEntryData)
+      : null;
   }
 
   async findAllByUserId(userId: number): Promise<ActiveRefreshToken[]> {
@@ -34,7 +47,7 @@ export class RefreshTokenRepository extends BaseRepository<ActiveRefreshToken> {
         `SELECT ${this.columns} FROM ${this.tableSchema}.${this.tableName} WHERE user_id=$1`,
         [userId.toString()]
       )
-    ).map((x) => new ActiveRefreshToken(x as ActiveRefreshToken));
+    ).map((x) => new ActiveRefreshToken(x as IActiveRefreshTokenEntryData));
   }
 
   async findUserRefreshTokensByUserId(
@@ -43,10 +56,10 @@ export class RefreshTokenRepository extends BaseRepository<ActiveRefreshToken> {
     const activeTokens = await this.findAllByUserId(userId);
     const usedTokens = (
       await this.dbConnection.query(
-        `SELECT (id, user_id, value, deleted_at) FROM ${this.tableSchema}.${this.historicTableName} WHERE user_id=$1`,
+        `SELECT id, user_id, value, deleted_at FROM ${this.tableSchema}.${this.historicTableName} WHERE user_id=$1`,
         [userId.toString()]
       )
-    ).map((x) => new UsedRefreshToken(x as UsedRefreshToken));
+    ).map((x) => new UsedRefreshToken(x as IUsedRefreshTokenEntryData));
 
     return new UserRefreshTokens(userId, activeTokens, usedTokens);
   }
@@ -58,7 +71,7 @@ export class RefreshTokenRepository extends BaseRepository<ActiveRefreshToken> {
       `INSERT INTO ${this.tableSchema}.${this.historicTableName} (user_id, value, deleted_at) VALUES ($1, $2, $3)`,
       [
         deletedEntry.user_id.toString(),
-        deletedEntry.value,
+        deletedEntry.value.toString(),
         new Date(Date.now()).toDateString()
       ]
     );

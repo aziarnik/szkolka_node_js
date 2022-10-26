@@ -1,7 +1,12 @@
-import { RefreshTokenBase } from './refresh-token-base';
+import {
+  IRefreshTokenBaseEntryData,
+  RefreshTokenBase
+} from './refresh-token-base';
 
 export class ActiveRefreshToken extends RefreshTokenBase {
-  constructor(entity: ActiveRefreshToken) {
+  constructor(entity: IActiveRefreshTokenEntryData) {
     super(entity);
   }
 }
+
+export type IActiveRefreshTokenEntryData = IRefreshTokenBaseEntryData;

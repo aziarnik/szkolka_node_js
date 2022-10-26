@@ -1,10 +1,17 @@
-import { PostgresBaseEntity } from './postgres-base-entity';
+import {
+  IPostrgesBaseEntryData,
+  PostgresBaseEntity
+} from './postgres-base-entity';
 
 export class UserRole extends PostgresBaseEntity {
   name: string;
 
-  constructor(entity: UserRole) {
+  constructor(entity: IUserRoleEntryData) {
     super(entity);
     this.name = entity.name;
   }
+}
+
+export interface IUserRoleEntryData extends IPostrgesBaseEntryData {
+  name: string;
 }

@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { Consts } from '../consts';
 import jwt from 'jsonwebtoken';
 import { Configuration } from '../configuration/configuration';
+import { logger } from '../bunyan';
 
 export class JwTokenHelper {
   static getJWToken = (req: Request): string => {
@@ -37,7 +38,27 @@ export class JwTokenHelper {
     return decodedToken?.exp as number;
   };
 
-  static validateToken = (token: string): void => {
-    jwt.verify(token, Configuration.JWTOKEN_SECRET);
+  static validateToken = (token: string): boolean => {
+    try {
+      jwt.verify(token, Configuration.JWTOKEN_SECRET);
+    } catch (err) {
+      logger.error(err);
+      return false;
+    }
+    return true;
+  };
+
+  static validateTokenExpirationDate = (token: string): boolean => {
+    try {
+      jwt.verify(token, Configuration.JWTOKEN_SECRET);
+    } catch (err) {
+      if (
+        err instanceof jwt.JsonWebTokenError &&
+        err.name === 'TokenExpiredError'
+      )
+        return false;
+    }
+
+    return true;
   };
 }

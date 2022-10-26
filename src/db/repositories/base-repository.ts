@@ -1,15 +1,21 @@
-import { PostgresBaseEntity } from '../entities/postgres-base-entity';
+import {
+  IPostrgesBaseEntryData,
+  PostgresBaseEntity
+} from '../entities/postgres-base-entity';
 import { IDbConnection } from '../interfaces/i-db-connection';
 import { BaseRepositoryHelper } from './base-repository-helper';
 
-export abstract class BaseRepository<Entity extends PostgresBaseEntity> {
+export abstract class BaseRepository<
+  Entity extends PostgresBaseEntity,
+  IEntityEntryData extends IPostrgesBaseEntryData
+> {
   protected readonly dbConnection: IDbConnection;
   protected abstract tableSchema: string;
   protected abstract tableName: string;
   protected abstract columns: string[];
 
   protected systemColumns: string[] = ['xmin'];
-  protected abstract entityType: new (entity: Entity) => Entity;
+  protected abstract entityType: new (entity: IEntityEntryData) => Entity;
 
   constructor(conn: IDbConnection) {
     this.dbConnection = conn;
@@ -21,7 +27,7 @@ export abstract class BaseRepository<Entity extends PostgresBaseEntity> {
         id,
         `${this.tableSchema}.${this.tableName}`,
         this.columns.concat(this.systemColumns)
-      )) as Entity
+      )) as IEntityEntryData
     );
   }
 
@@ -31,7 +37,7 @@ export abstract class BaseRepository<Entity extends PostgresBaseEntity> {
         id,
         `${this.tableSchema}.${this.tableName}`,
         this.columns.concat(this.systemColumns)
-      )) as Entity
+      )) as IEntityEntryData
     );
   }
 
@@ -40,7 +46,7 @@ export abstract class BaseRepository<Entity extends PostgresBaseEntity> {
       await this.dbConnection.queryWithoutParams(
         `SELECT ${this.columns}, ${this.systemColumns} FROM ${this.tableSchema}.${this.tableName};`
       )
-    ).map((x) => new this.entityType(x));
+    ).map((x) => new this.entityType(x as IEntityEntryData));
   }
 
   async delete(id: number): Promise<void> {
@@ -79,18 +85,20 @@ export abstract class BaseRepository<Entity extends PostgresBaseEntity> {
     const valuesArray: string[] = [];
     let iterator = 1;
 
-    this.columns.forEach((columnName, index, array) => {
-      const valueToInsert = (entity as any)[
-        BaseRepositoryHelper.getRawColumnName(columnName)
-      ];
-      if (valueToInsert) {
-        updateStatement += `${columnName}=$${iterator++}`;
-        if (array.length != index + 1) {
-          updateStatement += ', ';
+    this.columns
+      .filter((columnName) => columnName !== 'id')
+      .forEach((columnName, index, array) => {
+        const valueToInsert = (entity as any)[
+          BaseRepositoryHelper.getRawColumnName(columnName)
+        ];
+        if (valueToInsert) {
+          updateStatement += `${columnName}=$${iterator++}`;
+          if (array.length != index + 1) {
+            updateStatement += ', ';
+          }
+          valuesArray.push(BaseRepositoryHelper.objectToString(valueToInsert));
         }
-        valuesArray.push(BaseRepositoryHelper.objectToString(valueToInsert));
-      }
-    });
+      });
 
     await this.dbConnection.command(
       `UPDATE ${this.tableSchema}.${this.tableName} SET ${updateStatement} WHERE id=$${iterator} and xmin=${entity.xmin};`,

@@ -19,13 +19,13 @@ export class UserRefreshTokens {
 
   wasRefreshTokenUsedBefore(refreshToken: RefreshToken): boolean {
     return this.usedRefreshTokens.some((token) =>
-      RefreshToken.create(token.value).equals(refreshToken)
+      token.value.equals(refreshToken)
     );
   }
 
   getActiveRefreshTokenByValue(refreshToken: RefreshToken): ActiveRefreshToken {
     return this.activeRefreshTokens.find((token) =>
-      RefreshToken.create(token.value).equals(refreshToken)
+      token.value.equals(refreshToken)
     ) as ActiveRefreshToken;
   }
 }

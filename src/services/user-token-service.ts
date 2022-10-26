@@ -1,5 +1,6 @@
 import { UserContext } from '../context/user-context';
 import { ActiveRefreshToken } from '../db/entities/active-refresh-token';
+import { IRefreshTokenBaseEntryData } from '../db/entities/refresh-token-base';
 import { RefreshTokenRepository } from '../db/repositories/refresh-token-repository';
 import { UserRepository } from '../db/repositories/user-repository';
 import { Role } from '../enums/user-role';
@@ -30,7 +31,7 @@ export class UserTokenService {
       new ActiveRefreshToken({
         user_id: userId,
         value: refreshToken.value
-      } as ActiveRefreshToken)
+      } as IRefreshTokenBaseEntryData)
     );
 
     const userContext = new UserContext({

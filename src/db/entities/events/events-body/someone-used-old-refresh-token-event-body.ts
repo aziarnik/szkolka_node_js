@@ -1,11 +1,11 @@
 import { RepositoriesStorage } from '../../../repositories/repositories-storage';
 import { IEventBody } from './i-event-body';
 
-export class UserLoggedOutEventBody implements IEventBody {
+export class SomeoneUsedOldRefreshTokenEventBody implements IEventBody {
   userId: number;
 
-  constructor(userId: number) {
-    this.userId = userId;
+  constructor(body: ISomeoneUsedOldRefreshToken) {
+    this.userId = body.userId;
   }
 
   async process(repositoriesStorage: RepositoriesStorage): Promise<void> {
@@ -13,4 +13,8 @@ export class UserLoggedOutEventBody implements IEventBody {
       this.userId
     );
   }
+}
+
+export interface ISomeoneUsedOldRefreshToken {
+  userId: number;
 }

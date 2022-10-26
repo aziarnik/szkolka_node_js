@@ -9,3 +9,11 @@ export const editUserSchema = Joi.object<User>({
   id: Joi.number().required().sign('positive'),
   xmin: Joi.number().required()
 });
+
+export const editUserSchemaWithoutPassword = Joi.object<User>({
+  password: Joi.string(),
+  user_name: Joi.string().required().email(),
+  role: Joi.number().required().valid(Role.Admin, Role.User),
+  id: Joi.number().required().sign('positive'),
+  xmin: Joi.number().required()
+});

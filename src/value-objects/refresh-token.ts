@@ -19,8 +19,12 @@ export class RefreshToken extends ValueObject<RefreshTokenProps> {
     return JwTokenHelper.getTokenExpNounce(this.value);
   }
 
-  public validate() {
-    JwTokenHelper.validateToken(this.value);
+  public validate(): boolean {
+    return JwTokenHelper.validateToken(this.value);
+  }
+
+  validateExpirationDate(): boolean {
+    return JwTokenHelper.validateTokenExpirationDate(this.value);
   }
 
   public static generate(): RefreshToken {
@@ -43,5 +47,9 @@ export class RefreshToken extends ValueObject<RefreshTokenProps> {
 
   public static create(value: string): RefreshToken {
     return new RefreshToken({ value: value });
+  }
+
+  toString(): string {
+    return this.value;
   }
 }

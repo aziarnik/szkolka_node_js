@@ -29,6 +29,7 @@ IF NOT EXISTS (
         id serial NOT NULL,
         event_type character varying(255) NOT NULL,
         event_body json NOT NULL,
+        completed_at date,
         PRIMARY KEY (id)
     );
 

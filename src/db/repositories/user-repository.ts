@@ -1,9 +1,9 @@
 import { errorMessages } from '../../error-messages';
-import { User } from '../entities/user';
+import { IUserEntryData, User } from '../entities/user';
 import { IDbConnection } from '../interfaces/i-db-connection';
 import { BaseRepository } from './base-repository';
 
-export class UserRepository extends BaseRepository<User> {
+export class UserRepository extends BaseRepository<User, IUserEntryData> {
   protected tableName = 'users';
   protected tableSchema = 'auth';
   protected columns: string[] = [
@@ -14,7 +14,7 @@ export class UserRepository extends BaseRepository<User> {
     'role'
   ];
   private isNotDeletedContraint = 'deleted_on is NULL';
-  protected entityType: new (user: User) => User;
+  protected entityType: new (user: IUserEntryData) => User;
 
   constructor(conn: IDbConnection) {
     super(conn);
@@ -29,7 +29,7 @@ export class UserRepository extends BaseRepository<User> {
       await this.dbConnection.queryWithoutParams(
         `SELECT ${this.columns}, ${this.systemColumns} FROM ${this.tableSchema}.${this.tableName} WHERE ${this.isNotDeletedContraint};`
       )
-    ).map((x) => new User(x));
+    ).map((x) => new User(x as IUserEntryData));
   }
 
   override async firstOrDefaultById(
@@ -44,7 +44,7 @@ export class UserRepository extends BaseRepository<User> {
       [id.toString()]
     );
 
-    return new User(result[0] as User);
+    return new User(result[0] as IUserEntryData);
   }
 
   override async firstById(id: number, includeDeleted = false): Promise<User> {
@@ -63,7 +63,7 @@ export class UserRepository extends BaseRepository<User> {
       [email]
     );
 
-    return new User(result[0] as User);
+    return new User(result[0] as IUserEntryData);
   }
 
   override async delete(id: number): Promise<void> {

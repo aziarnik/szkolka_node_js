@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import { AuthController } from '../controllers/auth-controller';
 import { IDbConnection } from '../db/interfaces/i-db-connection';
 import { asyncHandler } from '../middlewares/async-handler';

@@ -13,6 +13,7 @@ import { authRoute } from './routers/auth-route';
 import { EventScheduler } from './scheduler/event-scheduler';
 import { userRoute } from './routers/user-route';
 import { isAuth } from './middlewares/is-auth';
+import { DeleteOldRefreshTokensScheduler } from './scheduler/delete-old-refresh-tokens-scheduler';
 
 const app = express();
 const port = Configuration.PORT;
@@ -33,7 +34,8 @@ app.listen(port, async () => {
       await seed(conn);
       await migrate(conn);
     });
-    //EventScheduler.scheduleEventProcess();
+    EventScheduler.scheduleEventProcess();
+    DeleteOldRefreshTokensScheduler.scheduleDeleteOldRefreshTokensJob();
   } catch (exc) {
     logger.error(exc);
   }
