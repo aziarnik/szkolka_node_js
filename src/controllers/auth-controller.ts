@@ -30,19 +30,20 @@ export class AuthController {
   async loginUser(req: Request<unknown, unknown, LoginDto>, res: Response) {
     await authLoginSchema.validateAsync(req.body);
     const user = await this.userRepository.findByEmail(req.body.userName);
-    user.checkIfPasswordIsCorrect(req.body.password);
+    await user.checkIfPasswordIsCorrect(req.body.password);
     const accessToken = await this.userTokenService.generateNewAccessToken(
       user.id,
       user.user_name,
       user.role
     );
 
-    res.setHeader(
-      Consts.AUTHORIZATION_HEADER,
-      Consts.AUTHORIZATION_HEADER_BEGINNING + accessToken.value
-    );
-
-    res.status(200).json('User logged in');
+    res
+      .setHeader(
+        Consts.AUTHORIZATION_HEADER,
+        Consts.AUTHORIZATION_HEADER_BEGINNING + accessToken.value
+      )
+      .status(200)
+      .json('User logged in');
   }
 
   @runInTransaction()
@@ -85,8 +86,8 @@ export class AuthController {
       res.status(421).json('Refresh token not exist');
     }
 
-    if (activeTokenFromDb.value.validate()) {
-      res.status(422).json('Refresh token expired');
+    if (!activeTokenFromDb.value.validate()) {
+      res.status(Consts.REFRESH_TOKEN_EXPIRED).json('Refresh token expired');
     }
 
     await this.refreshTokenRepository.archive(activeTokenFromDb.id);

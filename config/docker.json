@@ -4,5 +4,7 @@
         "postgreSql": "-"
     },
     "passwordPepper": "-",
-    "jwTokenSecret": "-"
+    "jwTokenSecret": "-",
+    "refreshTokenExpirationTimeInSeconds": "-",
+    "accessTokenExpirationTimeInSeconds": "-"
 }

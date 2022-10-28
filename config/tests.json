@@ -1,0 +1,11 @@
+{
+    "port": 0,
+    "connectionStrings": {
+        "postgreSql": "-"
+    },
+    "passwordPepper": "0be4f2b436c9ab20ac7b4540db86a98cf823c519b5d8e96f29f9f6aaea5b20b7",
+    "jwTokenSecret": "test_secret",
+    "refreshTokenExpirationTimeInSeconds": 20,
+    "accessTokenExpirationTimeInSeconds": 10
+    
+}

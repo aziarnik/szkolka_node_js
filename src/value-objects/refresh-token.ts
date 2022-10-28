@@ -1,3 +1,4 @@
+import { Configuration } from '../configuration/configuration';
 import { Consts } from '../consts';
 import { JwTokenHelper } from '../helpers/jwtoken-helper';
 import { ValueObject } from './value-object-base';
@@ -31,7 +32,7 @@ export class RefreshToken extends ValueObject<RefreshTokenProps> {
     return new RefreshToken({
       value: JwTokenHelper.generateJWToken(
         {},
-        Consts.REFRESH_TOKEN_EXPIRATION_IN_SECONDS
+        Configuration.REFRESH_TOKEN_EXPIRATION_IN_SECONDS
       )
     });
   }

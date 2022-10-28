@@ -3,18 +3,21 @@ import { Consts } from '../consts';
 import jwt from 'jsonwebtoken';
 import { Configuration } from '../configuration/configuration';
 import { logger } from '../bunyan';
+import { AccessToken } from '../value-objects/access-token';
 
 export class JwTokenHelper {
-  static getJWToken = (req: Request): string => {
+  static getJWToken = (req: Request): AccessToken => {
     const authorizationHeader = req.get(Consts.AUTHORIZATION_HEADER);
     if (
       authorizationHeader?.startsWith(Consts.AUTHORIZATION_HEADER_BEGINNING)
     ) {
-      return authorizationHeader.substring(
-        Consts.AUTHORIZATION_HEADER_BEGINNING_LENGTH
+      return AccessToken.create(
+        authorizationHeader.substring(
+          Consts.AUTHORIZATION_HEADER_BEGINNING_LENGTH
+        )
       );
     }
-    return '';
+    throw new Error('Access token not exist');
   };
 
   static generateJWToken = (

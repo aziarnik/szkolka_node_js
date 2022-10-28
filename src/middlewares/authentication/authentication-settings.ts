@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import { Consts } from '../../consts';
 import { RequestHandlerHelper } from '../../helpers/request-handler-helper';
 import { AccessType } from './access-type';
 
@@ -29,6 +30,6 @@ export const authenticationSettings = (opt: AccessType): RequestHandler => {
         break;
     }
 
-    res.status(400).json('Permission denied');
+    res.status(Consts.PERMISSION_DENIED_STATUS).json('Permission denied');
   };
 };

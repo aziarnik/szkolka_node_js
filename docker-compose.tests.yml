@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  db:
+  test-db:
     image: postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -11,23 +11,22 @@ services:
     ports:
       - '${POSTGRES_PORT}:5432'
     volumes:
-      - prod-postgres-volume:/var/lib/postgresql/data
+      - test-postgres-volume:/var/lib/postgresql/data
   szkolkanodejs:
     depends_on:
-      - db
+      - test-db
     image: szkolkanodejs
     build:
       context: .
       dockerfile: ./Dockerfile
+      target: builder-1
     ports:
       - ${PORT}:${PORT}
+      - 9229:9229
     environment:
       - NODE_ENV=${NODE_ENV}
-      - POSTGRES_CONNECTION_STRING=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
       - PORT=${PORT}
-      - PASSWORD_PEPPER=${PASSWORD_PEPPER}
-      - JWTOKEN_SECRET=${JWTOKEN_SECRET}
-      - REFRESH_TOKEN_EXPIRATION_TIME_IN_SECONDS=${REFRESH_TOKEN_EXPIRATION_TIME_IN_SECONDS}
-      - ACCESS_TOKEN_EXPIRATION_TIME_IN_SECONDS=${ACCESS_TOKEN_EXPIRATION_TIME_IN_SECONDS}
+      - POSTGRES_CONNECTION_STRING=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
+    command: sh -c './wait-for.sh test-db:5432 -- npm run start-docker-dev'
 volumes:
-  prod-postgres-volume:
+  test-postgres-volume:

@@ -1,3 +1,5 @@
+import { CustomError } from '../../errors/custom-error';
+import { errorMessages } from '../../errors/error-messages';
 import {
   IPostrgesBaseEntryData,
   PostgresBaseEntity
@@ -84,10 +86,12 @@ export abstract class BaseRepository<
     let updateStatement = '';
     const valuesArray: string[] = [];
     let iterator = 1;
+    let columnNameToReturnStatement = '';
 
     this.columns
       .filter((columnName) => columnName !== 'id')
       .forEach((columnName, index, array) => {
+        columnNameToReturnStatement = columnName;
         const valueToInsert = (entity as any)[
           BaseRepositoryHelper.getRawColumnName(columnName)
         ];
@@ -100,9 +104,14 @@ export abstract class BaseRepository<
         }
       });
 
-    await this.dbConnection.command(
-      `UPDATE ${this.tableSchema}.${this.tableName} SET ${updateStatement} WHERE id=$${iterator} and xmin=${entity.xmin};`,
-      [...valuesArray, entity.id.toString()]
-    );
+    const query = `UPDATE ${this.tableSchema}.${this.tableName} SET ${updateStatement} WHERE id=$${iterator} and xmin=${entity.xmin} RETURNING ${columnNameToReturnStatement};`;
+    const response = await this.dbConnection.query(query, [
+      ...valuesArray,
+      entity.id.toString()
+    ]);
+
+    if (response === null || response === undefined || response.length === 0) {
+      throw new CustomError(errorMessages.DB_CONCURRENCY_EXCEPTION);
+    }
   }
 }

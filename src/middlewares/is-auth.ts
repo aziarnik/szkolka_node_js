@@ -1,19 +1,14 @@
 import { RequestHandler } from 'express';
 import { JwTokenHelper } from '../helpers/jwtoken-helper';
 import jwt from 'jsonwebtoken';
-import { IUserContextEntry, UserContext } from '../context/user-context';
-import { Configuration } from '../configuration/configuration';
 import { Consts } from '../consts';
 import { asyncHandler } from './async-handler';
 
 export const isAuth: RequestHandler = asyncHandler(async (req, res, next) => {
-  const jwToken = JwTokenHelper.getJWToken(req);
   try {
-    const userContext: IUserContextEntry = jwt.verify(
-      jwToken,
-      Configuration.JWTOKEN_SECRET
-    ) as IUserContextEntry;
-    req.userContext = new UserContext(userContext);
+    const accessToken = JwTokenHelper.getJWToken(req);
+    accessToken.checkExpiration();
+    req.userContext = accessToken.getUserContext();
   } catch (err) {
     if (
       err instanceof jwt.JsonWebTokenError &&
@@ -29,14 +24,12 @@ export const isAuth: RequestHandler = asyncHandler(async (req, res, next) => {
 
 export const isAuthWithoutExpirationChecking: RequestHandler = asyncHandler(
   async (req, res, next) => {
-    const jwToken = JwTokenHelper.getJWToken(req);
-    const userContext: IUserContextEntry = jwt.verify(
-      jwToken,
-      Configuration.JWTOKEN_SECRET,
-      { ignoreExpiration: true }
-    ) as IUserContextEntry;
-    req.userContext = new UserContext(userContext);
-
+    try {
+      const accessToken = JwTokenHelper.getJWToken(req);
+      req.userContext = accessToken.getUserContext();
+    } catch (err) {
+      res.status(400).json('Wrong token');
+    }
     next();
   }
 );

@@ -1,7 +1,8 @@
-import { Consts } from '../consts';
-import { UserContext } from '../context/user-context';
+import { IUserContextEntry, UserContext } from '../context/user-context';
 import { JwTokenHelper } from '../helpers/jwtoken-helper';
 import { ValueObject } from './value-object-base';
+import jwt from 'jsonwebtoken';
+import { Configuration } from '../configuration/configuration';
 
 interface AccessTokenProps {
   value: string;
@@ -16,6 +17,13 @@ export class AccessToken extends ValueObject<AccessTokenProps> {
     super(props);
   }
 
+  public getUserContext(): UserContext {
+    const userContext: IUserContextEntry = jwt.decode(
+      this.value
+    ) as IUserContextEntry;
+    return new UserContext(userContext);
+  }
+
   public static generate(userContext: UserContext): AccessToken {
     return new AccessToken({
       value: JwTokenHelper.generateJWToken(
@@ -25,13 +33,22 @@ export class AccessToken extends ValueObject<AccessTokenProps> {
           refreshToken: userContext.refreshToken.value,
           role: userContext.role
         },
-        Consts.ACCESS_TOKEN_EXPIRATION_IN_SECONDS
+        Configuration.ACCESS_TOKEN_EXPIRATION_IN_SECONDS
       )
     });
   }
 
   public static create(value: string): AccessToken {
+    jwt.verify(value, Configuration.JWTOKEN_SECRET, { ignoreExpiration: true });
     return new AccessToken({ value: value });
+  }
+
+  public static createWithoutVerifying(value: string): AccessToken {
+    return new AccessToken({ value: value });
+  }
+
+  checkExpiration() {
+    jwt.verify(this.value, Configuration.JWTOKEN_SECRET);
   }
 
   toString(): string {

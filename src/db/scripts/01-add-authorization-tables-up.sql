@@ -37,9 +37,9 @@ ALTER TABLE IF EXISTS auth.users
 
 -- password is hash generated from 'password' string
 INSERT INTO auth.users (user_name, password, role, deleted_on) VALUES 
-('admin@admin.pl', '$2b$11$KHikE.0YIkPQgjhdtqedEOGyjn9Wz2JPzYn7.GyGs0VOTggNOAI4q', 2, NULL),
-('user@admin.pl', '$2b$11$KHikE.0YIkPQgjhdtqedEOGyjn9Wz2JPzYn7.GyGs0VOTggNOAI4q', 1, NULL), 
-('deletedUser@admin.pl', '$2b$11$KHikE.0YIkPQgjhdtqedEOGyjn9Wz2JPzYn7.GyGs0VOTggNOAI4q', 1, NOW());
+('admin@admin.pl', 'cbeb75b2a0bc4549336ee937b3463bf8:5cee04a812721937854c23409cb3617e89b31d72221a33fe7776eb709655d9d7d39efad42da22c7908a135e77b6f1fcd7927215500d27d47d30f38dfdf7d2a1d', 2, NULL),
+('user@admin.pl', 'cbeb75b2a0bc4549336ee937b3463bf8:5cee04a812721937854c23409cb3617e89b31d72221a33fe7776eb709655d9d7d39efad42da22c7908a135e77b6f1fcd7927215500d27d47d30f38dfdf7d2a1d', 1, NULL), 
+('deletedUser@admin.pl', 'cbeb75b2a0bc4549336ee937b3463bf8:5cee04a812721937854c23409cb3617e89b31d72221a33fe7776eb709655d9d7d39efad42da22c7908a135e77b6f1fcd7927215500d27d47d30f38dfdf7d2a1d', 1, NOW());
 
 CREATE TABLE auth.activerefreshtokens
 (

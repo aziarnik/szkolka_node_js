@@ -5,6 +5,8 @@ import type {
   Response
 } from 'express';
 import { logger } from '../bunyan';
+import { Consts } from '../consts';
+import { CustomError } from '../errors/custom-error';
 
 export const errorHandler: ErrorRequestHandler = (
   err,
@@ -17,5 +19,8 @@ export const errorHandler: ErrorRequestHandler = (
   }
   logger.error(err);
   req.dbConnection?.release();
-  res?.status(500)?.send(err);
+  if (err instanceof CustomError) {
+    res.status(Consts.CUSTOM_ERROR_STATUS).json(err.message);
+  }
+  res.status(500)?.json(err);
 };

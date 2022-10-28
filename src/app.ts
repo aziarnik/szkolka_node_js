@@ -29,6 +29,7 @@ app.use(errorHandler);
 
 app.listen(port, async () => {
   try {
+    console.log(`Program is running on port: ${port}`);
     logger.info(`Program is running on port: ${port}`);
     DbConnectionWrapper.runInPostgres(async (conn: IDbConnection) => {
       await seed(conn);
@@ -37,6 +38,7 @@ app.listen(port, async () => {
     EventScheduler.scheduleEventProcess();
     DeleteOldRefreshTokensScheduler.scheduleDeleteOldRefreshTokensJob();
   } catch (exc) {
+    console.log(exc);
     logger.error(exc);
   }
 });

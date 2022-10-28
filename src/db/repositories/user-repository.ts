@@ -1,4 +1,5 @@
-import { errorMessages } from '../../error-messages';
+import { CustomError } from '../../errors/custom-error';
+import { errorMessages } from '../../errors/error-messages';
 import { IUserEntryData, User } from '../entities/user';
 import { IDbConnection } from '../interfaces/i-db-connection';
 import { BaseRepository } from './base-repository';
@@ -51,7 +52,7 @@ export class UserRepository extends BaseRepository<User, IUserEntryData> {
     const result = await this.firstOrDefaultById(id, includeDeleted);
 
     if (!result) {
-      throw new Error(errorMessages.DB_ENTRY_NOT_EXIST);
+      throw new CustomError(errorMessages.DB_ENTRY_NOT_EXIST);
     }
 
     return result;
@@ -62,6 +63,10 @@ export class UserRepository extends BaseRepository<User, IUserEntryData> {
       `SELECT ${this.columns}, ${this.systemColumns} FROM ${this.tableSchema}.${this.tableName} WHERE user_name=$1 AND ${this.isNotDeletedContraint}`,
       [email]
     );
+
+    if (!result || result.length === 0) {
+      throw new CustomError(errorMessages.DB_ENTRY_NOT_EXIST);
+    }
 
     return new User(result[0] as IUserEntryData);
   }

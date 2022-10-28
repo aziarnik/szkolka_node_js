@@ -4,5 +4,7 @@
         "postgreSql": "POSTGRES_CONNECTION_STRING"
     },
     "passwordPepper": "PASSWORD_PEPPER",
-    "jwTokenSecret": "JWTOKEN_SECRET"
+    "jwTokenSecret": "JWTOKEN_SECRET",
+    "refreshTokenExpirationTimeInSeconds": "REFRESH_TOKEN_EXPIRATION_TIME_IN_SECONDS",
+    "accessTokenExpirationTimeInSeconds": "ACCESS_TOKEN_EXPIRATION_TIME_IN_SECONDS"
 }

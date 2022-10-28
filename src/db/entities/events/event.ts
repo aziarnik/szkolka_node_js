@@ -1,4 +1,4 @@
-import { errorMessages } from '../../../error-messages';
+import { errorMessages } from '../../../errors/error-messages';
 import { RepositoriesStorage } from '../../repositories/repositories-storage';
 import {
   IPostrgesBaseEntryData,
@@ -13,6 +13,7 @@ import {
   ISomeoneUsedOldRefreshToken,
   SomeoneUsedOldRefreshTokenEventBody
 } from './events-body/someone-used-old-refresh-token-event-body';
+import { CustomError } from '../../../errors/custom-error';
 
 type AllowedEventNames = 'UserDeleted' | 'SomeoneUsedOldRefreshToken';
 
@@ -41,7 +42,7 @@ export class AppEvent extends PostgresBaseEntity {
           eventBody as ISomeoneUsedOldRefreshToken
         );
       default:
-        throw new Error(errorMessages.NO_EVENT_MAPPING_PROVIDED);
+        throw new CustomError(errorMessages.NO_EVENT_MAPPING_PROVIDED);
     }
   }
 }

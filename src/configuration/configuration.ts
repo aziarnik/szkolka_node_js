@@ -10,4 +10,12 @@ export class Configuration {
   static readonly PASSWORD_PEPPER: string = config.get('passwordPepper');
 
   static readonly JWTOKEN_SECRET: string = config.get('jwTokenSecret');
+
+  static readonly REFRESH_TOKEN_EXPIRATION_IN_SECONDS: number = config.get(
+    'refreshTokenExpirationTimeInSeconds'
+  );
+
+  static readonly ACCESS_TOKEN_EXPIRATION_IN_SECONDS: number = config.get(
+    'accessTokenExpirationTimeInSeconds'
+  );
 }
