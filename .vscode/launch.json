@@ -6,15 +6,21 @@
     "configurations": [
         {
             "type": "node",
+            "request": "attach",
+            "name": "Docker: Attach to Node",
+            "remoteRoot": "/usr/src"
+        },
+        {
+            "type": "node",
             "request": "launch",
             "sourceMaps": true,
             "restart": true,
-            "name": "Launch Program",
+            "name": "Debug locally",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/src/app.ts",
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "npm: build",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ]

@@ -1,0 +1,6 @@
+{
+    "port": "PORT",
+    "connectionStrings": {
+        "postgreSql": "POSTGRES_CONNECTION_STRING"
+    }
+}

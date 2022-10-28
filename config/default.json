@@ -1,3 +1,6 @@
 {
-    "port": 4000
+    "port": 4000,
+    "connectionStrings": {
+        "postgreSql": "postgres://admin:admin@localhost:5432/szkolka_node_js"
+    }
 }

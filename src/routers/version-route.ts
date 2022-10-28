@@ -1,6 +1,10 @@
 import { Router } from 'express';
-import { GetBasicProjectInfo } from '../controllers/version-controller';
+import { VersionController } from '../controllers/version-controller';
+import { asyncHandler } from '../middlewares/async-handler';
 
 export const versionRoute = Router();
 
-versionRoute.get('/version', GetBasicProjectInfo);
+versionRoute.get(
+  '/version',
+  asyncHandler(VersionController.GetBasicProjectInfo)
+);
