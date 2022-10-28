@@ -13,7 +13,6 @@
     "build-docker-prod": "npm run build",
     "lint": "eslint . --ext .ts",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "docker-compose-up": "docker builder prune --force && docker compose --env-file .env.prod -f 'docker-compose.yml' up -d --build --force-recreate",
     "docker-compose-dev-up": "docker compose --env-file .env.dev -f 'docker-compose.dev.yml' up -d --build"
   },
   "repository": {
