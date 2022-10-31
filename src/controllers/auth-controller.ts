@@ -30,7 +30,10 @@ export class AuthController {
   async loginUser(req: Request<unknown, unknown, LoginDto>, res: Response) {
     await authLoginSchema.validateAsync(req.body);
     const user = await this.userRepository.findByEmail(req.body.userName);
-    await user.checkIfPasswordIsCorrect(req.body.password);
+
+    if (!(await user.checkIfPasswordIsCorrect(req.body.password))) {
+      return res.status(400).json('Forbidden access');
+    }
     const accessToken = await this.userTokenService.generateNewAccessToken(
       user.id,
       user.user_name,

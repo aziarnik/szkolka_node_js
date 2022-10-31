@@ -4,6 +4,7 @@ import { Consts } from '../../../consts';
 import { AccessToken } from '../../../value-objects/access-token';
 import { Role } from '../../../enums/user-role';
 import { IntegrationTestHelpers } from '../test-helpers';
+import { randomBytes } from 'crypto';
 
 describe('login tests', () => {
   test('Admin user should login', async () => {
@@ -31,4 +32,25 @@ describe('login tests', () => {
 
     expect(httpResponse.status).toBe(Consts.CUSTOM_ERROR_STATUS);
   });
+
+  test.each([
+    ['password1'],
+    ['password12'],
+    ['iufhewoifuhe'],
+    ['1password1'],
+    ['1password'],
+    [`${randomBytes(10).toString('hex')}cde`],
+    [`${randomBytes(10).toString('hex')}abc`]
+  ])(
+    'User with wrong password typed should not have access to application',
+    async (password: string) => {
+      const httpClient = new HttpClient();
+      const response = await httpClient.loginUser({
+        password: password,
+        userName: 'admin@admin.pl'
+      });
+
+      expect(response.status).toBe(400);
+    }
+  );
 });
