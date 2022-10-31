@@ -5,6 +5,7 @@ import { RegisterDto } from '../../contracts/auth/register-dto';
 import { ProjectBasicInfo } from '../../contracts/project-basic-info';
 import fetch from 'cross-fetch';
 import { TestConsts } from '../test-contsts';
+import { Consts } from '../../consts';
 
 export class HttpClient {
   private static baseUrl = `http://localhost:6000`;
@@ -123,13 +124,17 @@ export class HttpClient {
     });
   }
 
-  async updateUser(id: number, json_patch: Operation[]) {
+  async updateUser(id: number, json_patch: Operation[], transactionId: number) {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: this.authorizationHeader
+    } as { [key: string]: any };
+    headers[Consts.TRANSACTION_ID_HEADER_NAME as string] =
+      transactionId.toString();
+
     return await fetch(`${HttpClient.baseUrl}/users/${id}`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: this.authorizationHeader
-      },
+      headers: headers,
       body: JSON.stringify(json_patch)
     });
   }

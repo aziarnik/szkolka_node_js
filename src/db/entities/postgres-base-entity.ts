@@ -3,12 +3,12 @@ export abstract class PostgresBaseEntity {
   id = 0;
 
   constructor(entity: IPostrgesBaseEntryData) {
-    this.xmin = entity.xmin;
+    this.xmin = parseInt(entity.xmin);
     this.id = entity.id;
   }
 }
 
 export interface IPostrgesBaseEntryData {
-  xmin: number;
+  xmin: any;
   id: number;
 }

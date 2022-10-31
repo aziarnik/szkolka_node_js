@@ -12,6 +12,8 @@ import { RequestHandlerHelper } from '../helpers/request-handler-helper';
 import { EventRepository } from '../db/repositories/event-repository';
 import { UserDeletedEventBody } from '../db/entities/events/events-body/user-deleted-event-body';
 import { GetUserDto } from '../contracts/user/get-user-dto';
+import { CustomError } from '../errors/custom-error';
+import { errorMessages } from '../errors/error-messages';
 
 export class UserController {
   private readonly userRepository: UserRepository;
@@ -39,6 +41,13 @@ export class UserController {
   async updateUser(req: Request<any, any, Operation[]>, res: Response) {
     const userId = RequestHandlerHelper.getIdFromQueryParams(req);
     const user = await this.userRepository.firstById(userId);
+    if (
+      !user.validateTransactionId(
+        RequestHandlerHelper.getTransactionIdFromRequestHeader(req)
+      )
+    ) {
+      throw new CustomError(errorMessages.UPDATING_NOT_FRESH_ENTRY);
+    }
     const updatedUser = new User(
       applyPatch(user, req.body, undefined, false).newDocument
     );

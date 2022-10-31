@@ -7,4 +7,5 @@ export class Consts {
   static readonly CUSTOM_ERROR_STATUS = 430;
   static readonly PERMISSION_DENIED_STATUS = 431;
   static readonly REFRESH_TOKEN_USED_OR_DELETED_BY_JOB = 205;
+  static readonly TRANSACTION_ID_HEADER_NAME = 'TransactionId';
 }

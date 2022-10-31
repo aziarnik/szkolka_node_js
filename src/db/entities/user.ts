@@ -40,6 +40,10 @@ export class User extends PostgresBaseEntity {
       await editUserSchemaWithoutPassword.validateAsync(this);
     }
   }
+
+  validateTransactionId(xminFromRequest: number): boolean {
+    return this.xmin === xminFromRequest;
+  }
 }
 
 export interface IUserEntryData extends IPostrgesBaseEntryData {
