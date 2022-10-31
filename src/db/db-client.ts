@@ -2,7 +2,7 @@ import { Pool, PoolClient } from 'pg';
 import { PostgresDbConnection } from './postgres-db-connection';
 import { IDbConnection } from './interfaces/i-db-connection';
 import { Configuration } from '../configuration/configuration';
-import { logger } from '../bunyan';
+import logger from '../bunyan';
 
 export class DbConnectionFactory {
   static async getPostgresConnection(): Promise<IDbConnection> {

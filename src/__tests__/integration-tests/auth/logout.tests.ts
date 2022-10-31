@@ -3,8 +3,8 @@ import { HttpClient } from '../http.client';
 import { IntegrationTestHelpers } from '../test-helpers';
 import { Consts } from '../../../consts';
 
-describe('user should logout', () => {
-  test('user should not be possible to access protected endpoint when token expires', async () => {
+describe('logout tests', () => {
+  test('user should not be possible to access protected endpoint when token expires but refresh would still be active', async () => {
     const httpClient = new HttpClient();
     await httpClient.loginUser({
       password: 'password',

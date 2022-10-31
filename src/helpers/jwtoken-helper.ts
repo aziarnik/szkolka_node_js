@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { Consts } from '../consts';
 import jwt from 'jsonwebtoken';
 import { Configuration } from '../configuration/configuration';
-import { logger } from '../bunyan';
+import logger from '../bunyan';
 import { AccessToken } from '../value-objects/access-token';
 
 export class JwTokenHelper {

@@ -4,7 +4,7 @@ import type {
   Request,
   Response
 } from 'express';
-import { logger } from '../bunyan';
+import logger from '../bunyan';
 import { Consts } from '../consts';
 import { CustomError } from '../errors/custom-error';
 

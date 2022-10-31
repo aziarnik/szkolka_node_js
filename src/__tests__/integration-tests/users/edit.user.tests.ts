@@ -5,7 +5,7 @@ import { randomBytes } from 'crypto';
 import { IntegrationTestHelpers } from '../test-helpers';
 import { AccessToken } from '../../../value-objects/access-token';
 
-describe('get users tests', () => {
+describe('edit users tests', () => {
   test('Simple user not should be able to edit not himself', async () => {
     const httpClient = new HttpClient();
     await httpClient.loginAsUser();

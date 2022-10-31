@@ -4,6 +4,7 @@ import { GetUserDto } from '../../contracts/user/get-user-dto';
 import { RegisterDto } from '../../contracts/auth/register-dto';
 import { ProjectBasicInfo } from '../../contracts/project-basic-info';
 import fetch from 'cross-fetch';
+import { TestConsts } from '../test-contsts';
 
 export class HttpClient {
   private static baseUrl = `http://localhost:6000`;
@@ -19,15 +20,15 @@ export class HttpClient {
 
   async loginAsAdmin(): Promise<Response> {
     return await this.loginUser({
-      password: 'password',
-      userName: 'admin@admin.pl'
+      password: TestConsts.adminUserPassword,
+      userName: TestConsts.adminUserName
     });
   }
 
   async loginAsUser(): Promise<Response> {
     return await this.loginUser({
-      password: 'password',
-      userName: 'user@admin.pl'
+      password: TestConsts.simpleUserPassword,
+      userName: TestConsts.simpleUserName
     });
   }
 
@@ -76,6 +77,19 @@ export class HttpClient {
 
     const data = await response.json();
     return data as GetUserDto[];
+  }
+
+  async getUser(userId: number): Promise<GetUserDto> {
+    const response = await fetch(`${HttpClient.baseUrl}/users/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.authorizationHeader
+      }
+    });
+
+    const data = await response.json();
+    return data as GetUserDto;
   }
 
   async getAllActiveUsersWithHttpResponse(): Promise<Response> {

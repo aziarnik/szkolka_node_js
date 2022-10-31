@@ -6,8 +6,8 @@ export class IntegrationTestHelpers {
   }
 
   static getAccessToken(response: Response) {
-    return (response.headers.get('Authorization') as string).substring(
-      Consts.AUTHORIZATION_HEADER_BEGINNING_LENGTH
-    );
+    return (
+      response.headers.get(Consts.AUTHORIZATION_HEADER) as string
+    ).substring(Consts.AUTHORIZATION_HEADER_BEGINNING_LENGTH);
   }
 }

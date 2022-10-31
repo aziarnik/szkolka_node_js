@@ -5,7 +5,7 @@ import { AccessToken } from '../../../value-objects/access-token';
 import { Role } from '../../../enums/user-role';
 import { IntegrationTestHelpers } from '../test-helpers';
 
-describe('user should login', () => {
+describe('login tests', () => {
   test('Admin user should login', async () => {
     const httpClient = new HttpClient();
     const response = await httpClient.loginUser({

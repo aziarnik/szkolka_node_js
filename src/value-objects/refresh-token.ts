@@ -1,5 +1,4 @@
 import { Configuration } from '../configuration/configuration';
-import { Consts } from '../consts';
 import { JwTokenHelper } from '../helpers/jwtoken-helper';
 import { ValueObject } from './value-object-base';
 

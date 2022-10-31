@@ -3,8 +3,8 @@ import { HttpClient } from '../http.client';
 import { Role } from '../../../enums/user-role';
 import { TestConsts } from '../../test-contsts';
 
-describe('get users tests', () => {
-  test('Simple user should be able to get data', async () => {
+describe('get user by id tests', () => {
+  test('Simple user should be able to get user data', async () => {
     const httpClient = new HttpClient();
     await httpClient.loginAsUser();
 
@@ -14,11 +14,14 @@ describe('get users tests', () => {
       (u) => u.user_name === TestConsts.simpleUserName
     );
 
-    expect(givenUser?.user_name).toBe(TestConsts.simpleUserName);
-    expect(givenUser?.role).toBe(Role.User);
+    const response = await httpClient.getUser(givenUser?.id as number);
+
+    expect(response?.user_name).toBe(TestConsts.simpleUserName);
+    expect(response?.role).toBe(Role.User);
+    expect(response.id).toBe(givenUser?.id);
   });
 
-  test('Admin should be able to get data', async () => {
+  test('Admin should be able to get user data', async () => {
     const httpClient = new HttpClient();
     await httpClient.loginAsAdmin();
 
@@ -28,7 +31,10 @@ describe('get users tests', () => {
       (u) => u.user_name === TestConsts.adminUserName
     );
 
-    expect(givenUser?.user_name).toBe(TestConsts.adminUserName);
-    expect(givenUser?.role).toBe(Role.Admin);
+    const response = await httpClient.getUser(givenUser?.id as number);
+
+    expect(response?.user_name).toBe(TestConsts.adminUserName);
+    expect(response?.role).toBe(Role.Admin);
+    expect(response.id).toBe(givenUser?.id);
   });
 });

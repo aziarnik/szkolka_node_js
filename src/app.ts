@@ -5,7 +5,7 @@ import { migrate } from './db/migrations/migrate';
 import { seed } from './db/migrations/seed';
 import { errorHandler } from './middlewares/error-request-handler';
 import { assignDbConnection } from './middlewares/assign-db-connection';
-import { logger } from './bunyan';
+import logger from './bunyan';
 import { IDbConnection } from './db/interfaces/i-db-connection';
 import { DbConnectionWrapper } from './db/db-client';
 import { Configuration } from './configuration/configuration';
@@ -29,7 +29,6 @@ app.use(errorHandler);
 
 app.listen(port, async () => {
   try {
-    console.log(`Program is running on port: ${port}`);
     logger.info(`Program is running on port: ${port}`);
     DbConnectionWrapper.runInPostgres(async (conn: IDbConnection) => {
       await seed(conn);
@@ -38,7 +37,6 @@ app.listen(port, async () => {
     EventScheduler.scheduleEventProcess();
     DeleteOldRefreshTokensScheduler.scheduleDeleteOldRefreshTokensJob();
   } catch (exc) {
-    console.log(exc);
     logger.error(exc);
   }
 });

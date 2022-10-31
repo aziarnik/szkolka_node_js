@@ -7,5 +7,4 @@
     "jwTokenSecret": "test_secret",
     "refreshTokenExpirationTimeInSeconds": 20,
     "accessTokenExpirationTimeInSeconds": 10
-    
 }

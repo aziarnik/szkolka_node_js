@@ -4,15 +4,18 @@ import { Consts } from '../../../consts';
 import { randomBytes } from 'crypto';
 import { IntegrationTestHelpers } from '../test-helpers';
 import { AccessToken } from '../../../value-objects/access-token';
+import { TestConsts } from '../../test-contsts';
 
-describe('get users tests', () => {
-  test('Simple user should be able to delete not himself', async () => {
+describe('delete user tests', () => {
+  test('Simple user should not be able to delete not himself', async () => {
     const httpClient = new HttpClient();
     await httpClient.loginAsUser();
 
     const activeUsers = await httpClient.getAllActiveUsers();
 
-    const adminUser = activeUsers.find((u) => u.user_name === 'admin@admin.pl');
+    const adminUser = activeUsers.find(
+      (u) => u.user_name === TestConsts.adminUserName
+    );
 
     const response = await httpClient.deleteUser(adminUser?.id as number);
     expect(response.status).toBe(Consts.PERMISSION_DENIED_STATUS);

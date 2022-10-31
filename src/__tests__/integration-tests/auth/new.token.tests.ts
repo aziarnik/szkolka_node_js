@@ -31,7 +31,6 @@ describe('New access token endpoint tests', () => {
     await IntegrationTestHelpers.wait(11000);
     const secondResponse = await httpClient.newAccessToken();
 
-    console.log(secondResponse);
     const newAccessToken = AccessToken.createWithoutVerifying(
       IntegrationTestHelpers.getAccessToken(secondResponse)
     );

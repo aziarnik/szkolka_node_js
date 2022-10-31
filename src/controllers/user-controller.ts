@@ -23,6 +23,13 @@ export class UserController {
   }
 
   @runInTransaction()
+  async getUser(req: Request, res: Response<GetUserDto>) {
+    const userId = RequestHandlerHelper.getIdFromQueryParams(req);
+    const result = await this.userRepository.firstById(userId);
+    res.send(new GetUserDto(result));
+  }
+
+  @runInTransaction()
   async getAllUsers(req: Request, res: Response<GetUserDto[]>) {
     const result = await this.userRepository.getAll();
     res.send(result.map((user) => new GetUserDto(user)));

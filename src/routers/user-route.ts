@@ -17,6 +17,13 @@ userRoute.get(
   )
 );
 
+userRoute.get(
+  '/:id',
+  asyncHandler((req: Request, res: Response) =>
+    getUserController(req.dbConnection as IDbConnection).getUser(req, res)
+  )
+);
+
 userRoute.delete(
   '/:id',
   authenticationSettings(AccessType.ForAdminAndOwnUserData),
