@@ -7,27 +7,35 @@ export const authenticationSettings = (opt: AccessType): RequestHandler => {
   return (req, res, next) => {
     const userContext = req.userContext;
     const requestUserId = RequestHandlerHelper.getIdFromQueryParams(req);
-    switch (opt) {
-      case AccessType.ForUser:
-        if (userContext.isUser()) {
-          return next();
-        }
-        break;
-      case AccessType.ForAdminAndOwnUserData:
-        if (
-          userContext.isAdmin() ||
-          (userContext.id && requestUserId && userContext.id === requestUserId)
-        ) {
-          return next();
-        }
-        break;
-      case AccessType.OnlyForAdmin:
-        if (userContext.isAdmin()) {
-          return next();
-        }
-        break;
-      default:
-        break;
+
+    if (opt === AccessType.ForUser) {
+      if (userContext.isUser()) {
+        return next();
+      }
+      return res
+        .status(Consts.PERMISSION_DENIED_STATUS)
+        .json('Permission denied');
+    }
+
+    if (opt === AccessType.ForAdminAndOwnUserData) {
+      if (
+        userContext.isAdmin() ||
+        (userContext.id && requestUserId && userContext.id === requestUserId)
+      ) {
+        return next();
+      }
+      return res
+        .status(Consts.PERMISSION_DENIED_STATUS)
+        .json('Permission denied');
+    }
+
+    if (opt === AccessType.OnlyForAdmin) {
+      if (userContext.isAdmin()) {
+        return next();
+      }
+      return res
+        .status(Consts.PERMISSION_DENIED_STATUS)
+        .json('Permission denied');
     }
 
     res.status(Consts.PERMISSION_DENIED_STATUS).json('Permission denied');

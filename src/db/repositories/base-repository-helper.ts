@@ -7,7 +7,7 @@ export class BaseRepositoryHelper {
     return columnName.replace('"', '');
   }
 
-  static objectToString(value: any): string {
+  static valueToString(value: any): string {
     if (Number.isInteger(value)) {
       return Number(value).toString();
     }

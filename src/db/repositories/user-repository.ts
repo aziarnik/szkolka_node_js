@@ -30,7 +30,7 @@ export class UserRepository extends BaseRepository<User, IUserEntryData> {
       await this.dbConnection.queryWithoutParams(
         `SELECT ${this.columns}, ${this.systemColumns} FROM ${this.tableSchema}.${this.tableName} WHERE ${this.isNotDeletedContraint};`
       )
-    ).map((x) => new User(x as IUserEntryData));
+    ).map((user) => new User(user as IUserEntryData));
   }
 
   override async firstOrDefaultById(

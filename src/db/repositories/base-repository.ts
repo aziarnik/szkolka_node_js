@@ -73,7 +73,7 @@ export abstract class BaseRepository<
         if (array.length != index + 1) {
           valuesMarkings += ', ';
         }
-        valuesArray.push(BaseRepositoryHelper.objectToString(valueToInsert));
+        valuesArray.push(BaseRepositoryHelper.valueToString(valueToInsert));
         columnsInCommand.push(columnName);
       }
     });
@@ -100,7 +100,7 @@ export abstract class BaseRepository<
           if (array.length != index + 1) {
             updateStatement += ', ';
           }
-          valuesArray.push(BaseRepositoryHelper.objectToString(valueToInsert));
+          valuesArray.push(BaseRepositoryHelper.valueToString(valueToInsert));
         }
       });
 
