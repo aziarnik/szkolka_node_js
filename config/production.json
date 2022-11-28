@@ -2,5 +2,9 @@
     "port": 5000,
     "connectionStrings": {
         "postgreSql": "postgres://admin:admin@localhost:5432/szkolka_node_js"
-    }
+    },
+    "passwordPepper": "auto_generated_string",
+    "jwTokenSecret": "auto_generated_string_also",
+    "refreshTokenExpirationTimeInSeconds": "-",
+    "accessTokenExpirationTimeInSeconds": "-"
 }

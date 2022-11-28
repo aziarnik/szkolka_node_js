@@ -1,6 +1,6 @@
 import { IDbConnection } from '../interfaces/i-db-connection';
-import { InitialMigration } from './01-initial-migration';
+import { AddAuthorizationTablesMigration } from './01-add-authorization-tables';
 
 export const migrate = async function (connection: IDbConnection) {
-  connection.queryWithoutParams(await InitialMigration.up());
+  connection.queryWithoutParams(await AddAuthorizationTablesMigration.up());
 };

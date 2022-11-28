@@ -2,5 +2,9 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "transformIgnorePatterns": ["dist"],
+    "transform": {
+        "^.+\\.ts?$": "ts-jest",
+        "^-+\\.ts?$": "ts-jest"
+      },
     "testMatch": ["**/__tests__/**/*.tests.ts","**/__tests__/**/*.test.ts"]
 }

@@ -1,4 +1,5 @@
-import { errorMessages } from '../error-messages';
+import { CustomError } from '../errors/custom-error';
+import { errorMessages } from '../errors/error-messages';
 import { IConnection } from './interfaces/i-connection';
 import { IDbConnection } from './interfaces/i-db-connection';
 
@@ -44,7 +45,7 @@ export class PostgresDbConnection implements IDbConnection {
     columns: string[]
   ): Promise<unknown> {
     const result = await this.query(
-      `SELECT ${columns.join(',')} FROM public.${tableName} WHERE id=$1;`,
+      `SELECT ${columns.join(',')} FROM ${tableName} WHERE id=$1;`,
       [id.toString()]
     );
     return result[0];
@@ -57,7 +58,7 @@ export class PostgresDbConnection implements IDbConnection {
   ): Promise<unknown> {
     const result = await this.firstOrDefaultById(id, tableName, columns);
     if (!result) {
-      throw Error(
+      throw new CustomError(
         `${errorMessages.DB_ENTRY_NOT_EXIST} - table name: ${tableName}, id: ${id}`
       );
     }
