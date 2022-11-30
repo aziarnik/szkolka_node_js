@@ -12,6 +12,8 @@ services:
       - '${POSTGRES_PORT}:5432'
     volumes:
       - dev-postgres-volume:/var/lib/postgresql/data
+    networks:
+      - nodejsschoolnet
   szkolkanodejs:
     depends_on:
       - postgres
@@ -32,5 +34,11 @@ services:
       - REFRESH_TOKEN_EXPIRATION_TIME_IN_SECONDS=${REFRESH_TOKEN_EXPIRATION_TIME_IN_SECONDS}
       - ACCESS_TOKEN_EXPIRATION_TIME_IN_SECONDS=${ACCESS_TOKEN_EXPIRATION_TIME_IN_SECONDS}
     command: sh -c './wait-for.sh postgres:5432 -- npm run start-docker-dev'
+    networks:
+      - nodejsschoolnet
 volumes:
   dev-postgres-volume:
+networks:
+  nodejsschoolnet:
+    name: node_js_custom_network
+

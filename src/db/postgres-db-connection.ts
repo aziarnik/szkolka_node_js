@@ -45,7 +45,7 @@ export class PostgresDbConnection implements IDbConnection {
     columns: string[]
   ): Promise<unknown> {
     const result = await this.query(
-      `SELECT ${columns.join(',')} FROM ${tableName} WHERE id=$1;`,
+      `SELECT ${columns.join(',')} FROM ${tableName} WHERE id=$1 limit 1;`,
       [id.toString()]
     );
     return result[0];

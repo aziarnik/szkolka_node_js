@@ -1,5 +1,3 @@
-import { CustomError } from '../../errors/custom-error';
-import { errorMessages } from '../../errors/error-messages';
 import { ValueObject } from '../../value-objects/value-object-base';
 
 export class BaseRepositoryHelper {
@@ -20,6 +18,7 @@ export class BaseRepositoryHelper {
     if (value instanceof ValueObject) {
       return value.toString();
     }
-    throw new CustomError(errorMessages.NO_MAPPING_PROVIDED);
+
+    return JSON.stringify(value);
   }
 }

@@ -69,10 +69,10 @@ export abstract class BaseRepository<
         BaseRepositoryHelper.getRawColumnName(columnName)
       ];
       if (valueToInsert) {
-        valuesMarkings += `$${iterator++}`;
-        if (array.length != index + 1) {
+        if (valuesMarkings) {
           valuesMarkings += ', ';
         }
+        valuesMarkings += `$${iterator++}`;
         valuesArray.push(BaseRepositoryHelper.valueToString(valueToInsert));
         columnsInCommand.push(columnName);
       }
@@ -96,10 +96,10 @@ export abstract class BaseRepository<
           BaseRepositoryHelper.getRawColumnName(columnName)
         ];
         if (valueToInsert) {
-          updateStatement += `${columnName}=$${iterator++}`;
-          if (array.length != index + 1) {
+          if (updateStatement) {
             updateStatement += ', ';
           }
+          updateStatement += `${columnName}=$${iterator++}`;
           valuesArray.push(BaseRepositoryHelper.valueToString(valueToInsert));
         }
       });

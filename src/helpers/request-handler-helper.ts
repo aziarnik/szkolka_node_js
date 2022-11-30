@@ -6,6 +6,10 @@ export class RequestHandlerHelper {
     return parseInt(req.params.id as string);
   }
 
+  static getTransactionIdFromQueryParams(req: Request): number {
+    return parseInt(req.params.transactionId as string);
+  }
+
   static getTransactionIdFromRequestHeader(req: Request): number {
     const value = req.get(Consts.TRANSACTION_ID_HEADER_NAME) as string;
     return parseInt(value);

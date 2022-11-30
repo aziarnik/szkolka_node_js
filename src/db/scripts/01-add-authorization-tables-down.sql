@@ -5,5 +5,5 @@ DROP TABLE IF EXISTS auth.user_roles;
 DROP TABLE IF EXISTS auth.users;
 DROP SCHEMA IF EXISTS auth;
 
-DELETE FROM public.migrations WHERE migrationName = '01-add-authorization-tables';
+DELETE FROM public.migrations WHERE migration_name = '01-add-authorization-tables';
 COMMIT;
